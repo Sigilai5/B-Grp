@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DdlMappings">
+    <mapping uuid="601cef54-bde7-40fe-bf92-597435292180" name="donatDB Mapping">
+      <data-sources db="be58cab8-1271-429b-9767-17133b83885e" />
+    </mapping>
+  </component>
+</project>
