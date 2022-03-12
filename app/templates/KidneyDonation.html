@@ -1,14 +1,14 @@
 {%extends "base.html"%}
 {% from "_formhelpers.html" import render_field%}
 
-<title>Register</title>
+<title>Kideny Donation</title>
 
 {%block body%}
 
 
-        <form method="POST" action="{{url_for('blood_donation')}}" >
+        <form method="POST" action="{{url_for('Kidney_donate')}}" >
             {{form.hidden_tag()}}
-            <div class="card-header">Donate Blood</div>
+            <div class="card-header">Donate Kidney</div>
             <div class="card-body">
                 <div class="form-group">
                     <lable>Enter age</lable>
@@ -22,11 +22,23 @@
                 </div>
 
                 <div class="form-group">
-                  <label> Enter blood_group</label>
+                  <label> blood_group</label>
                   {{render_field(form.blood_group)}}
                 </div>
 
-          
+
+
+                <div class="form-group">
+                  <label> Previous drinking</label>
+                  {{render_field(form.drinking)}}
+                  <p>Check if True OR else leave blank</p>
+                </div>
+
+                <div class="form-group">
+                  <label> disease_history</label>
+                  {{render_field(form.disease_history)}}
+                </div>
+
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>

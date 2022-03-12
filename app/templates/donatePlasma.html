@@ -6,9 +6,9 @@
 {%block body%}
 
 
-        <form method="POST" action="{{url_for('blood_donation')}}" >
+        <form method="POST" action="{{url_for('plasma_donation')}}" >
             {{form.hidden_tag()}}
-            <div class="card-header">Donate Blood</div>
+            <div class="card-header">Donate Plasma</div>
             <div class="card-body">
                 <div class="form-group">
                     <lable>Enter age</lable>
@@ -22,11 +22,11 @@
                 </div>
 
                 <div class="form-group">
-                  <label> Enter blood_group</label>
-                  {{render_field(form.blood_group)}}
+                  <label> Enter allergies</label>
+                  {{render_field(form.allergies)}}
                 </div>
 
-          
+
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>
