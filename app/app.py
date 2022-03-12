@@ -252,6 +252,23 @@ def lung():
     lungs = Lung.query.all()
     return render_template("lung.html",lungs=lungs,users=users)
 
+@app.route("/mydonations/")
+def mydon():
+    user = User.query.get(current_user.id)
+    blood = Blood.query.filter_by(user_id = current_user.id).first()
+    plasma = Plasma.query.filter_by(user_id = current_user.id).first()
+    lung = Lung.query.filter_by(user_id = current_user.id).first()
+    kidney = Kidney.query.filter_by(user_id = current_user.id).first()
+
+    return render_template("mydonations.html", user =user, blood =blood, plasma =plasma, lung=lung, kidney=kidney)
+
+
+
+@app.route("/logout/")
+def Signout():
+    logout_user()
+    flash('Signed OUT')
+    return redirect(url_for('index'))
 
 
 
