@@ -1,0 +1,37 @@
+{%extends "base.html"%}
+{% from "_formhelpers.html" import render_field%}
+
+<title>Register</title>
+
+{%block body%}
+
+
+        <form method="POST" action="{{url_for('plasma_donation')}}" >
+            {{form.hidden_tag()}}
+            <div class="card-header">Donate Plasma</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <lable>Enter age</lable>
+                    {{render_field(form.age)}}
+                </div>
+
+
+                <div class="form-group">
+                    <label> Enter your weight</label>
+                    {{render_field(form.weight)}}
+                </div>
+
+                <div class="form-group">
+                  <label> Enter allergies</label>
+                  {{render_field(form.allergies)}}
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+
+
+
+
+{%endblock%}
