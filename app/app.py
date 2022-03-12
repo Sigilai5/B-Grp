@@ -203,19 +203,6 @@ def Signin():
 
     return render_template("SignIn.html", form=form)
 
-'''
-@app.route("/donate_Blood")
-def blood_donation():
-    form = donatebloood()
-       if request.method == "POST" and form.validate():
-        new_Blood = User(username = form.username.data, phone_no = form.phone_number.data, sex =form.sex.data,
-                    email = form.email.data, password = pass_hash)            
-        db.session.add(new_User)
-        db.session.commit()
-        return redirect(url_for('Signin'))
-        
-'''
-
 
 
 
@@ -251,6 +238,53 @@ def lung():
     users = User.query.all()
     lungs = Lung.query.all()
     return render_template("lung.html",lungs=lungs,users=users)
+
+@app.route("/donate_Blood", methods=["GET" , "POST"])
+def blood_donation():
+    form = donatebloood()
+    print(current_user.id)
+    if request.method == "POST" and form.validate():
+        new_Blood = Blood(age = form.age.data, weight = form.weight.data, blood_group =form.blood_group.data, user_id = current_user.get_id())
+        db.session.add(new_Blood)
+        db.session.commit()
+        flash("Blood Donation Posted")
+        return redirect(url_for('home'))
+    return render_template("donateBlood.html", form=form)
+
+
+@app.route("/donate_plasma", methods=["GET" , "POST"])
+def plasma_donation():
+    form = plasmaform()
+    if request.method == "POST" and form.validate():
+        new_plamsa = Plasma(age = form.age.data, weight = form.weight.data, allergies = form.allergies.data, user_id = current_user.get_id())
+        db.session.add(new_plamsa)
+        db.session.commit()
+        flash("Plasma Donation Posted")
+        return redirect(url_for('home'))
+    return render_template("donatePlasma.html", form=form)
+
+
+@app.route("/donate_lung", methods=["GET" , "POST"])
+def lung_donate():
+    form = lungForm()
+    if request.method == "POST" and form.validate():
+        new_Lung = Lung(age = form.age.data, weight = form.weight.data, trauma = form.trauma.data, smoking = form.smoking.data ,user_id = current_user.get_id())
+        db.session.add(new_Lung)
+        db.session.commit()
+        flash("Lung Donation Posted")
+        return redirect(url_for('home'))
+    return render_template("LungPlasma.html", form=form)
+
+@app.route("/donate_Kidney", methods=["GET" , "POST"])
+def Kidney_donate():
+    form = kidneyForm()
+    if request.method == "POST" and form.validate():
+        new_Kidney = Kidney(age = form.age.data, weight = form.weight.data, blood_group = form.blood_group.data, drinking = form.drinking.data, disease_history = form.disease_history.data ,user_id = current_user.get_id())
+        db.session.add(new_Kidney)
+        db.session.commit()
+        flash("Kidney Donation Posted")
+        return redirect(url_for('home'))
+    return render_template("KidneyDonation.html", form=form)
 
 @app.route("/mydonations/")
 def mydon():
