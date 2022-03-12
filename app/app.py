@@ -258,6 +258,36 @@ def home():
     return render_template("home.html")
 
 
+@app.route("/donations")
+def donation():
+    return render_template("donations.html")
+
+@app.route("/plasma")
+def plasma():
+    plasmas = Plasma.query.all()
+    users = User.query.all()
+
+    return render_template("plasma.html",plasmas=plasmas,users=users)
+
+@app.route("/blood")
+def blood():
+    users = User.query.all()
+    bloods = Blood.query.all()
+    return render_template("blood.html",bloods=bloods,users=users)
+
+@app.route("/kidney")
+def kidney():
+    users = User.query.all()
+    kidneys = Kidney.query.all()
+    return render_template("kidney.html",kidneys=kidneys,users=users)
+
+@app.route("/lung")
+def lung():
+    users = User.query.all()
+    lungs = Lung.query.all()
+    return render_template("lung.html",lungs=lungs,users=users)
+
+
 
 @app.route("/mydonations/")
 def mydon():
@@ -276,6 +306,10 @@ def Signout():
     logout_user()
     flash('Signed OUT')
     return redirect(url_for('index'))
+
+
+
+
 
 
 
