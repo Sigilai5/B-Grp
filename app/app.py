@@ -3,8 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, LoginManager, UserMixin, login_user, logout_user, current_user
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
-from wtforms import StringField, IntegerField, PasswordField, TextAreaField, SelectField
-from wtforms.validators import InputRequired, EqualTo, Length
+from wtforms import StringField, IntegerField, PasswordField, TextAreaField, SelectField, BooleanField
+from wtforms.validators import InputRequired, EqualTo, Length, DataRequired
 from wtforms.fields import IntegerRangeField
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -63,11 +63,11 @@ class Blood(db.Model):
     blood_group = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
 
-    def __init__ (self, id, age, weight, blood_group):
-        self.id = id
+    def __init__ (self, age, weight, blood_group, user_id):
         self.age = age
         self.weight = weight
         self.blood_group = blood_group
+        self.user_id = user_id
 
 
 class Plasma(db.Model):
@@ -77,12 +77,12 @@ class Plasma(db.Model):
     allergies = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
 
-    def __init__ (self, id, age, weight, allergies):
-        self.id = id
+    def __init__ (self, age, weight, allergies, user_id):
+
         self.age = age
         self.weight = weight
         self.allergies = allergies
-
+        self.user_id = user_id
 
 class Lung(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -92,12 +92,12 @@ class Lung(db.Model):
     smoking = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
 
-    def __init__ (self, id, age, weight, smoking, trauma):
-        self.id = id
+    def __init__ (self, age, weight, smoking, trauma,user_id):
         self.age = age
         self.weight = weight
         self.smoking = smoking
         self.trauma = trauma
+        self.user_id = user_id
 
 class Kidney(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -108,13 +108,14 @@ class Kidney(db.Model):
     disease_history = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable =False)
 
-    def __init__ (self, id, age, weight, blood_group, drinking, disease_history):
-        self.id = id
+    def __init__ (self, age, weight, blood_group, drinking, disease_history,user_id):
+
         self.age = age
         self.weight = weight
         self.blood_group = blood_group
         self.drinking = drinking
         self.disease_history = disease_history
+        self.user_id = user_id
 
 
 
@@ -125,7 +126,7 @@ class userRegistration(FlaskForm):
     username = StringField("username" , validators=[InputRequired()])
     phone_number = IntegerField("phone_number", validators=[InputRequired()])
     email = StringField("email", validators=[InputRequired()])
-    sex = SelectField("Sex?", choices=[('Male', 'Male'), ('Female', 'Female')])
+    sex = SelectField("Sex", choices=[('Male', 'Male'), ('Female', 'Female')])
     password = PasswordField("password", validators=[InputRequired(), EqualTo("confirm_pass", message= "Passwords Don't Match")])
     confirm_pass = PasswordField("confirm_pass")
 
@@ -149,15 +150,15 @@ class plasmaform(FlaskForm):
 class lungForm(FlaskForm):
     age = IntegerField("age", validators=[InputRequired()])
     weight = IntegerField("weight", validators=[InputRequired()])
-    trauma = SelectField("trauma", choices=[('Yes', 'TRUE'), ('no', 'FALSE')])
-    smoking = SelectField("Smoking", choices=[('Yes', 'TRUE'), ('no', 'FALSE')])
+    trauma = BooleanField('Have.')
+    smoking = BooleanField('I do')
 
 
 class kidneyForm(FlaskForm):
     age = IntegerField("age", validators=[InputRequired()])
     weight = IntegerField("weight", validators=[InputRequired()])
     blood_group = StringField("blood_group", validators=[InputRequired()])
-    drinking = SelectField("Drinking", choices=[('Yes', 'TRUE'), ('no', 'FALSE')])
+    drinking =  BooleanField('I do')
     disease_history = StringField("disease_history", validators=[InputRequired()])
 
 ######################
@@ -200,23 +201,54 @@ def Signin():
         flash("incorrect credentials")
     return render_template("SignIn.html", form=form)
 
- '''
-@app.route("/donate_Blood")
+
+@app.route("/donate_Blood", methods=["GET" , "POST"])
 def blood_donation():
     form = donatebloood()
-        if request.method == "POST" and form.validate():
-            new_Blood = User(username = form.username.data, phone_no = form.phone_number.data, sex =form.sex.data,
-                    email = form.email.data, password = pass_hash)
-            db.session.add(new_User)
-            db.session.commit()
-
-                return redirect(url_for('Signin'))
-        return render_template("sigup.html", form =form)
-
-
+    print(current_user.id)
+    if request.method == "POST" and form.validate():
+        new_Blood = Blood(age = form.age.data, weight = form.weight.data, blood_group =form.blood_group.data, user_id = current_user.get_id())
+        db.session.add(new_Blood)
+        db.session.commit()
+        flash("Blood Donation Posted")
+        return redirect(url_for('home'))
     return render_template("donateBlood.html", form=form)
 
-'''
+
+@app.route("/donate_plasma", methods=["GET" , "POST"])
+def plasma_donation():
+    form = plasmaform()
+    if request.method == "POST" and form.validate():
+        new_plamsa = Plasma(age = form.age.data, weight = form.weight.data, allergies = form.allergies.data, user_id = current_user.get_id())
+        db.session.add(new_plamsa)
+        db.session.commit()
+        flash("Plasma Donation Posted")
+        return redirect(url_for('home'))
+    return render_template("donatePlasma.html", form=form)
+
+
+@app.route("/donate_lung", methods=["GET" , "POST"])
+def lung_donate():
+    form = lungForm()
+    if request.method == "POST" and form.validate():
+        new_Lung = Lung(age = form.age.data, weight = form.weight.data, trauma = form.trauma.data, smoking = form.smoking.data ,user_id = current_user.get_id())
+        db.session.add(new_Lung)
+        db.session.commit()
+        flash("Lung Donation Posted")
+        return redirect(url_for('home'))
+    return render_template("LungPlasma.html", form=form)
+
+@app.route("/donate_Kidney", methods=["GET" , "POST"])
+def Kidney_donate():
+    form = kidneyForm()
+    if request.method == "POST" and form.validate():
+        new_Kidney = Kidney(age = form.age.data, weight = form.weight.data, blood_group = form.blood_group.data, drinking = form.drinking.data, disease_history = form.disease_history.data ,user_id = current_user.get_id())
+        db.session.add(new_Kidney)
+        db.session.commit()
+        flash("Kidney Donation Posted")
+        return redirect(url_for('home'))
+    return render_template("KidneyDonation.html", form=form)
+
 
 
 
@@ -225,6 +257,25 @@ def blood_donation():
 def home():
     return render_template("home.html")
 
+
+
+@app.route("/mydonations/")
+def mydon():
+    user = User.query.get(current_user.id)
+    blood = Blood.query.filter_by(user_id = current_user.id).first()
+    plasma = Plasma.query.filter_by(user_id = current_user.id).first()
+    lung = Lung.query.filter_by(user_id = current_user.id).first()
+    kidney = Kidney.query.filter_by(user_id = current_user.id).first()
+
+    return render_template("mydonations.html", user =user, blood =blood, plasma =plasma, lung=lung, kidney=kidney)
+
+
+
+@app.route("/logout/")
+def Signout():
+    logout_user()
+    flash('Signed OUT')
+    return redirect(url_for('index'))
 
 
 
