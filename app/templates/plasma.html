@@ -10,6 +10,22 @@
 {% block content %}
 
 
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{{url_for('index')}}">
+        <img src="{{url_for('static', filename='projectpics/logo.png')}}" alt="txt" width="30" height="40" class="d-inline-block align-text-top">
+        Organo
+      </a>
+      <div class="d-flex">
+        <a href="{{url_for('Signin')}}"> SIGN IN</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{{url_for('donation')}}"> DONATIONS</a>
+
+
+
+      </div>
+    </div>
+  </nav>
 
 
 

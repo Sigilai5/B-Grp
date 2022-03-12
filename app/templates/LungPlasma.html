@@ -5,6 +5,27 @@
 
 {%block body%}
 
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{{url_for('index')}}">
+        <img src="{{url_for('static', filename='projectpics/logo.png')}}" alt="txt" width="30" height="40" class="d-inline-block align-text-top">
+        Organo
+      </a>
+      <div class="d-flex">
+
+        <a href="{{url_for('mydon')}}"> MY DONATION</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{{url_for('Signout')}}"> SIGN OUT</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{{url_for('donation')}}"> DONATIONS</a>
+
+
+
+      </div>
+    </div>
+  </nav>
+
+
 
         <form method="POST" action="{{url_for('lung_donate')}}" >
             {{form.hidden_tag()}}

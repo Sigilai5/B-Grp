@@ -1,3 +1,30 @@
+{%extends "base.html"%}
+{%block body%}
+
+
+
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{{url_for('index')}}">
+        <img src="{{url_for('static', filename='projectpics/logo.png')}}" alt="txt" width="30" height="40" class="d-inline-block align-text-top">
+        Organo
+      </a>
+      <div class="d-flex">
+
+        <a href="{{url_for('Signin')}}"> SIGN IN</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+        <a href="{{url_for('donation')}}"> DONATIONS</a>
+
+
+
+      </div>
+    </div>
+  </nav>
+
+
+
+
 <div class="main-container">
   <div class="heading">
     <h1 class="heading__title">Donations</h1>
@@ -31,11 +58,9 @@
 
 
 
-  </div>
 
-    <div class="col-md-6">
-    </div>
-    <div class="col-md-6">
+
+    <div class="col-md-3">
          <div class="card card-4">
       <div class="card__icon"><i class="fas fa-bolt"></i></div>
       <p class="card__exit"><i class="fas fa-times"></i></p>
@@ -190,3 +215,7 @@ body {
 }
 
 </style>
+
+
+
+{%endblock%}
